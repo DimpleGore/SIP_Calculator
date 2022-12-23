@@ -6,10 +6,10 @@ exports.calculateSIP = (req,res) => {
      return res.status(412).json({message: "Some parametrs are missing"})
    }
    if(principal<500){
-    return res.status(412).json({message: "Minimum value allowed is 500"})
+    return res.status(412).json({message: "Minimum monthly investment should be 500"})
    }
    if(time<1 || rate<1){
-    return res.status(412).json({message: "Minimum value allowed is 1"})
+    return res.status(412).json({message: "Minimum time period or return should be 1"})
    }
    let timeInMonth = time*12;
    let i = rate/(100*12);

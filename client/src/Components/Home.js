@@ -7,6 +7,9 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
+import DoughnutChart from './DoughnutChart';
+import { color } from '@mui/system';
+
 //import InputLabel from '@mui/material/InputLabel';
 
 
@@ -15,7 +18,10 @@ import Button from '@mui/material/Button';
  
 function Home(){
 
+  
+
     const [data, setData] = useState("");
+    const [error, setError] = useState("");
     const [sip, setSip] = useState({
         principal: "",
         rate: "",
@@ -23,6 +29,7 @@ function Home(){
     })
 
     const handleInputChange = (e) => {
+      setError("")
         const { name, value } = e.target;
     
             setSip({
@@ -34,31 +41,40 @@ function Home(){
     const submitHandler = (e) => {
         e.preventDefault();
         axios.post("/sip/sip_amount", {...sip}).then((result) => {
-            console.log(result)
+          //console.log(result.data.result)
+          if(result && result.data && result.data.result){
+            console.log(result.data.result)
+            setData(result.data.result)
+          }
+        }).catch((err) => {
+          console.log(err)
+          setError(err.response.data.message)
         })
      }
 
     const buttonHandler = async() => {
         const result = await axios.get("/home")
-        console.log(result)
-        setData(result.data)
+        
     }
     return (
         <div>
+           
+
             {data.length>0 && <h2>{data}</h2>}
             <button onClick={buttonHandler}>Click me</button>
             <div>
-            <Box component="form" noValidate onSubmit={submitHandler}
+            <Box  component="form" noValidate onSubmit={submitHandler}
       style={{
         
-          display: 'flex',
-          width: '50%',
-          height: '50%',
-          margin: 'auto'
+          
+          width: '40%',
+          margin: 'auto',
+          textAlign: 'center'
         
       }}
     >
       <Paper style={{padding:'20px'}} elevation={3} >
+        {error && <p style={{color: 'red' ,fontSize: '0.75rem'}}>{error}</p>}
       <Grid container spacing={2}>
       <Grid item xs={12}>
         <TextField id="principal" 
@@ -67,7 +83,9 @@ function Home(){
         InputProps={{
             endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
           }}
-
+        required
+        error={error}
+        helperText={error && error}
         label="Monthly Investment" variant="standard" onChange={handleInputChange} />
         </Grid>
         <Grid item xs={12}>
@@ -77,7 +95,7 @@ function Home(){
         InputProps={{
             endAdornment: <InputAdornment position="end">%</InputAdornment>,
           }}
-
+        required
         label="Expected return rate(p.a)" variant="standard" onChange={handleInputChange} />
         </Grid>
         <Grid item xs={12}>
@@ -87,14 +105,24 @@ function Home(){
         InputProps={{
             endAdornment: <InputAdornment position="end">Yr</InputAdornment>,
           }}
-
+        required
         label="Time Period" variant="standard" onChange={handleInputChange}/>
         </Grid>
+        
+        <Grid item xs={12}>
+          <Button  type="submit" variant="contained" >Calculate SIP</Button>
         </Grid>
-        <Button  type="submit" variant="contained" sx={{ mt: 3, mb: 2, ml: 4 }}>Calculate SIP</Button>
+        {data.invested_amount && <Grid item xs={12} md={12}>
+           <DoughnutChart  sip={data}/>
+        </Grid>}
+      </Grid>
+          
+        
       </Paper>
     </Box>
+    
             </div>
+       
         </div>
         
 
