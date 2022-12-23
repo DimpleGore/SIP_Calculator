@@ -30,7 +30,7 @@ export default function Signin() {
         e.preventDefault();
 
         try {
-            const record = await axios.post("/sip/signin", { ...formValues });
+            const record = await axios.post("/user/signin", { ...formValues });
             if (record.status == 200) {
                 alert(record.data.msg)
                 localStorage.setItem('token', record.data.accesstoken)

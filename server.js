@@ -10,7 +10,7 @@ app.use(express.json())
 const port = process.env.PORT || 5000;
 
 app.use("/sip",require("./routes/siphandler"))
-
+app.use("/user",require("./routes/userhandler"))
 
 mongoose.set("strictQuery", false);
 
