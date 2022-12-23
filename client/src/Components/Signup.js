@@ -28,7 +28,7 @@ export default function SignUp(props) {
         e.preventDefault();
 
         try {
-            const record = await axios.post("/user/signup", { ...formValues });
+            const record = await axios.post("/sip/signup", { ...formValues });
             if (record.status == 200) {
                 alert(record.data.msg)
                 Navigate("/login");
