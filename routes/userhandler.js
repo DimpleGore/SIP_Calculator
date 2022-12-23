@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const sipController = require("../controllers/siphandler")
 const userController = require("../controllers/userhandler")
 
 router.post("/signup", userController.register)

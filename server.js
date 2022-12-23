@@ -12,6 +12,9 @@ const port = process.env.PORT || 5000;
 app.use("/sip",require("./routes/siphandler"))
 app.use("/user",require("./routes/userhandler"))
 
+mongoose.set("strictQuery", false);
+
+
 mongoose.connect(
     process.env.MONGODB_URI || 'mongodb+srv://Dimple:OfPw7ix6xO7qJGCD@dimple.llwb2.mongodb.net/sip?retryWrites=true&w=majority',
     
@@ -25,10 +28,6 @@ mongoose.connect(
     }
   );
   
-
-app.get('/home', (req, res) => {
-    res.send("home")
-})
 
 if (process.env.NODE_ENV == 'production') {
     const path = require('path')
