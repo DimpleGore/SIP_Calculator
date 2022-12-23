@@ -3,12 +3,28 @@ const cors = require('cors');
 const app = express();
 require("dotenv").config();
 const path = require('path')
+const mongoose = require("mongoose");
 app.use(cors())
 app.use(express.json())
 
 const port = process.env.PORT || 5000;
 
 app.use("/sip",require("./routes/siphandler"))
+app.use("/user",require("./routes/userhandler"))
+
+mongoose.connect(
+    process.env.MONGODB_URI || 'mongodb+srv://Dimple:OfPw7ix6xO7qJGCD@dimple.llwb2.mongodb.net/sip?retryWrites=true&w=majority',
+    
+    {
+    
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+    (err) => {
+      if (err) throw err;
+    }
+  );
+  
 
 app.get('/home', (req, res) => {
     res.send("home")
